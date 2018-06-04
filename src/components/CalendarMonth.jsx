@@ -7,7 +7,7 @@ import momentPropTypes from 'react-moment-proptypes';
 import { forbidExtraProps, nonNegativeInteger } from 'airbnb-prop-types';
 import { css, withStyles, withStylesPropTypes } from 'react-with-styles';
 import moment from 'moment';
-
+import momentJalaali from 'moment-jalaali';
 import { CalendarDayPhrases } from '../defaultPhrases';
 import getPhrasePropTypes from '../utils/getPhrasePropTypes';
 
@@ -88,7 +88,7 @@ class CalendarMonth extends React.Component {
 
     this.state = {
       weeks: getCalendarMonthWeeks(
-        props.month,
+        momentJalaali(props.month),
         props.enableOutsideDays,
         props.firstDayOfWeek == null ? moment.localeData().firstDayOfWeek() : props.firstDayOfWeek,
       ),
@@ -206,7 +206,8 @@ class CalendarMonth extends React.Component {
                   key: dayOfWeek,
                   day,
                   daySize,
-                  isOutsideDay: !day || day.month() !== month.month(),
+                  // isOutsideDay: !day || day.month() !== month.month(),
+                  isOutsideDay: !day || momentJalaali(day).startOf('jMonth').format("jMM") !== momentJalaali(month).startOf('jMonth').format("jMM") ,
                   tabIndex: isVisible && isSameDay(day, focusedDate) ? 0 : -1,
                   isFocused,
                   onDayMouseEnter,
